@@ -69,7 +69,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ReferencePath>$(ReferencePath)</ReferencePath>
+    <IncludePath>E:\Tools\VC\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -111,6 +114,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\BufferManager.h" />
+    <ClInclude Include="include\Catalog.h" />
+    <ClInclude Include="include\CatalogManager.h" />
+    <ClInclude Include="include\Condition.h" />
+    <ClInclude Include="include\DBMS.h" />
+    <ClInclude Include="include\Definitions.h" />
+    <ClInclude Include="include\IndexManager.h" />
+    <ClInclude Include="include\RecordManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
