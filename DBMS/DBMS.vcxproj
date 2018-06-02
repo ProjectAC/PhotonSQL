@@ -107,6 +107,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -114,14 +115,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\BpTree.h" />
     <ClInclude Include="include\BufferManager.h" />
     <ClInclude Include="include\Catalog.h" />
     <ClInclude Include="include\CatalogManager.h" />
     <ClInclude Include="include\Condition.h" />
     <ClInclude Include="include\DBMS.h" />
     <ClInclude Include="include\Definitions.h" />
+    <ClInclude Include="include\Exception.h" />
     <ClInclude Include="include\IndexManager.h" />
     <ClInclude Include="include\RecordManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\BufferManager.cpp" />
+    <ClCompile Include="src\Catalog.cpp" />
+    <ClCompile Include="src\CatalogManager.cpp" />
+    <ClCompile Include="src\IndexManager.cpp" />
+    <ClCompile Include="src\RecordManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

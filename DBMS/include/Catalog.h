@@ -14,13 +14,14 @@ namespace Photon
         STRING
     };
 
-    typedef std::variant<std::monostate, Integer, Real, std::string> Attribute;
+    typedef std::variant<std::monostate, Integer, Real, String> Attribute;
     typedef std::vector<Attribute> Row;
+    bool operator <(const Attribute &a, const Attribute &b);
     
     struct Column
     {
-        std::string Name;
-        AttributeType Type;
+        std::string name;
+        AttributeType type;
         uint length;
         bool notNull;
         bool unique;
@@ -33,12 +34,22 @@ namespace Photon
         std::string column;
     };
 
-    struct Table
+    class Table
     {
-        std::vector<Column> columns;
-        std::vector<Index> indicies;
-
+    public:
+        Column getColumn(uint id);
+        std::vector<Column> getColumns();
         uint hasColumn(const std::string &name);
         uint rowSize();
+        std::vector<Index> getIndicies();
+
+        Table(std::vector<Column> columns, std::vector<Index> indicies);
+
+    private:
+
+        std::vector<Column> columns;
+        std::vector<Index> indicies;
+        uint width;
+        uint autoIncrement;
     };
 }

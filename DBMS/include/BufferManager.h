@@ -1,6 +1,9 @@
 #pragma once
 
 #include <string>
+#include <unordered_map>
+#include <array>
+#include <fstream>
 #include "Definitions.h"
 
 namespace Photon
@@ -8,28 +11,54 @@ namespace Photon
     class BufferManager
     {
     public:
+        static const uint SIZE = 4096;
 
         static BufferManager &getInstance();
+        BufferManager();
 
-        void *get(const std::string &fileName, uint id);
+        byte *get(const std::string &fileName, uint id);
 
     private:
 
         static BufferManager *instance;
         
-        class Buffer
+        class FileBuffer
         {
         public:
-            void load(const std::string &fileName, uint id);
-            void *content();
-            Buffer();
-            ~Buffer();
+
+            class BufferUnit
+            {
+            public:
+                void load(uint id);
+                void save();
+
+                byte *content();
+                uint ID();
+
+                void count();
+                uint getCount();
+
+                BufferUnit(std::fstream &stream);
+                ~BufferUnit();
+
+            private:
+                std::fstream &file;
+                uint counter;
+                uint id;
+                byte *buffer;
+            };
+            
+            FileBuffer(std::string fileName);
+            ~FileBuffer();
+
+            byte *get(uint id);
 
         private:
-            std::string fileName;
-            uint id;
-            void *buffer;
-        };
 
+            std::fstream file;
+            std::array<BufferUnit*, 16> buffers;
+        };
+        
+        std::unordered_map<std::string, FileBuffer> files;
     };
 }
