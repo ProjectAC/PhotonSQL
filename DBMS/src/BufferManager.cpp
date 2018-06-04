@@ -18,13 +18,15 @@ namespace Photon
 
     byte *BufferManager::get(const std::string &fileName, uint id)
     {
+        if (files.find(fileName) == files.end())
+            files.insert({fileName, FileBuffer(fileName)});
         return files[fileName].get(id);
     }
 
     ///////////// FileBuffer /////////////
 
     BufferManager::FileBuffer::FileBuffer(std::string fileName) :
-        file(fileName)
+        file(fileName, ios::in | ios::out | ios::ate | ios::binary)
     {
         for (auto &b : buffers)
             b = new BufferUnit(file);
@@ -53,11 +55,17 @@ namespace Photon
 
     void BufferManager::FileBuffer::BufferUnit::load(uint id)
     {
+        file.seekg(id * SIZE, ios::beg);
         file.read(buffer, SIZE);
+        this->id = id;
+#if defined LRUBUFFER
+        counter = 0;
+#endif
     }
 
     void BufferManager::FileBuffer::BufferUnit::save()
     {
+        file.seekp(id * SIZE, ios::beg);
         file.write(buffer, SIZE);
     }
 
@@ -71,6 +79,7 @@ namespace Photon
         return id;
     }
 
+#if defined LRUBUFFER
     void BufferManager::FileBuffer::BufferUnit::count()
     {
         counter = counter + 1;
@@ -80,6 +89,7 @@ namespace Photon
     {
         return counter;
     }
+#endif
 
     BufferManager::FileBuffer::BufferUnit::BufferUnit(std::fstream &stream) :
         file(stream)

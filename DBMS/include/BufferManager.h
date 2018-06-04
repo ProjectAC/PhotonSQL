@@ -35,17 +35,22 @@ namespace Photon
                 byte *content();
                 uint ID();
 
+#if defined LRUBUFFER
                 void count();
                 uint getCount();
+#endif
 
                 BufferUnit(std::fstream &stream);
                 ~BufferUnit();
 
             private:
                 std::fstream &file;
-                uint counter;
                 uint id;
                 byte *buffer;
+
+#if defined LRUBUFFER
+                uint counter;
+#endif
             };
             
             FileBuffer(std::string fileName);

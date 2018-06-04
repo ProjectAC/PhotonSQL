@@ -28,4 +28,9 @@ namespace Photon
     {
 
     }
+
+    void IndexManager::build()
+    {
+
+    }
 }

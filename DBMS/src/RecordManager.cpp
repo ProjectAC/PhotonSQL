@@ -59,4 +59,9 @@ namespace Photon
 
         return res;
     }
+
+    void RecordManager::encode(byte *p, const std::vector<Column> &columns, const Row &r)
+    {
+        
+    }
 }

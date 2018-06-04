@@ -5,6 +5,8 @@ using namespace std;
 
 namespace Photon
 {
+    /////////////////// Attibute ///////////////////
+
     bool operator <(const Attribute &a, const Attribute &b)
     {
         if (a.index() != b.index())
@@ -20,12 +22,14 @@ namespace Photon
             throw UnknownTypeException();
     }
 
-    Column Table::getColumn(uint id)
+    /////////////////// Table ///////////////////
+
+    Column & Table::getColumn(uint id)
     {
         return columns[id];
     }
 
-    vector<Column> Table::getColumns()
+    vector<Column> & Table::getColumns()
     {
         return columns;
     }
@@ -46,14 +50,25 @@ namespace Photon
         return width;
     }
 
-    vector<Index> Table::getIndicies()
+    vector<Index> & Table::getIndicies()
     {
         return indicies;
     }
 
-    Table::Table(vector<Column> columns, vector<Index> indicies) :
+    uint Table::getIncrement()
+    {
+        return autoIncrement;
+    }
+
+    void Table::count()
+    {
+        autoIncrement++;
+    }
+
+    Table::Table(const vector<Column> & columns, const vector<Index> & indicies, uint autoIncrement) :
         columns(columns),
-        indicies(indicies)
+        indicies(indicies),
+        autoIncrement(autoIncrement)
     {
         width = 0;
         for (auto &c : columns)

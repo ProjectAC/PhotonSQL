@@ -43,6 +43,7 @@ namespace Photon
         
         const Row & decode(const std::vector<Column> &columns, byte *p);
         void encode(byte *p, const std::vector<Column> &columns, const Row &r);
+        
         static RecordManager *instance;
     };
 }

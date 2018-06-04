@@ -37,13 +37,16 @@ namespace Photon
     class Table
     {
     public:
-        Column getColumn(uint id);
-        std::vector<Column> getColumns();
+        Column &getColumn(uint id);
+        std::vector<Column> &getColumns();
         uint hasColumn(const std::string &name);
         uint rowSize();
-        std::vector<Index> getIndicies();
+        std::vector<Index> &getIndicies();
+        
+        uint getIncrement();
+        void count();
 
-        Table(std::vector<Column> columns, std::vector<Index> indicies);
+        Table(const std::vector<Column> &columns, const std::vector<Index> &indicies, uint autoIncrement);
 
     private:
 
