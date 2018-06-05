@@ -19,17 +19,17 @@ namespace Photon
 
     }
 
-    void IndexManager::insert(const Attribute &id, uint handle)
+    void IndexManager::insert(const std::string &indexName, const Attribute &id, uint handle)
     {
 
     }
 
-    void IndexManager::remove(const Attribute &id)
+    void IndexManager::remove(const std::string &indexName, const Attribute &id)
     {
 
     }
 
-    void IndexManager::build()
+    void IndexManager::build(const std::string &indexName)
     {
 
     }

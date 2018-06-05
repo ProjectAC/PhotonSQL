@@ -28,8 +28,8 @@ namespace Photon
         class IndexResult
         {
         public:
-            IndexIterator begin() const;
-            IndexIterator end() const;
+            const IndexIterator &begin() const;
+            const IndexIterator &end() const;
             IndexResult(const std::string &indexName, const Attribute &__begin, const Attribute & __end);
 
         private:
@@ -37,8 +37,9 @@ namespace Photon
         };
 
         const IndexResult &fetch(const std::string &indexName, const Attribute &__begin, const Attribute &__end);
-        void insert(const Attribute &id, uint handle);
-        void remove(const Attribute &id);
+        void insert(const std::string &indexName, const Attribute &id, uint handle);
+        void remove(const std::string &indexName, const Attribute &id);
+        void build(const std::string &indexName);
 
     private:
         

@@ -18,22 +18,29 @@ namespace Photon
             RecordIterator(const std::string &tableName, uint id);
 
             bool operator != (const RecordIterator &i) const;
-            const Row & operator *() const;
-            const RecordIterator& operator ++();
+            std::pair<uint, const Row &> operator *() const;
+            const RecordIterator & operator ++();
+
+        private:
+
+            const string &tableName;
+            uint id;
         };
 
         class RecordResult
         {
         public:
-            RecordIterator begin() const;
-            RecordIterator end() const;
+            const RecordIterator & begin() const;
+            const RecordIterator & end() const;
             RecordResult(const std::string &tableName, uint __begin, uint __end);
         
         private:
             
+            std::string tableName;
+            uint beginID, endID;
         };
 
-        RecordResult traverse(const std::string &tableName);
+        const RecordResult &traverse(const std::string &tableName);
         const Row & fetch(const std::string &tableName, uint id);
         void insert(const std::string &tableName, const Row &row);
 
@@ -43,6 +50,9 @@ namespace Photon
         
         const Row & decode(const std::vector<Column> &columns, byte *p);
         void encode(byte *p, const std::vector<Column> &columns, const Row &r);
+        
+        void writeBit(byte *p, uint pos, bool value);
+        bool readBit(byte *p, uint pos);
         
         static RecordManager *instance;
     };

@@ -15,7 +15,7 @@ namespace Photon
         Table &getTable(const std::string &name);
         Index &getIndex(const std::string &index);
 
-        void createTable(const std::string &tableName, const std::vector<Comlumn> columns);
+        void createTable(const std::string &tableName, const std::vector<Column> columns);
         void createIndex(const std::string &indexName, const std::string &tableName, const std::string columnName);
         void dropTable(const std::string &tableName);
         void dropIndex(const std::string &indexName);
