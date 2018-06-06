@@ -46,12 +46,12 @@ namespace Photon
         uint getIncrement();
         void count();
 
-        Table(const std::vector<Column> &columns, const std::vector<Index> &indicies, uint autoIncrement);
+        Table(const std::vector<Column> &columns, const std::vector<std::string> &indicies, uint autoIncrement);
 
     private:
 
         std::vector<Column> columns;
-        std::vector<Index> indicies;
+        std::vector<std::string> indicies;
         uint width;
         uint autoIncrement;
     };
