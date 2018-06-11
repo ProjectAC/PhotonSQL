@@ -1,8 +1,14 @@
 #pragma once
 
 #include <vector>
+#include <utility>
+#include <variant>
+#include <bitset>
 #include "Definitions.h"
 #include "Catalog.h"
+#include "BufferManager.h"
+#include "CatalogManager.h"
+#include "Exception.h"
 
 namespace Photon
 {
