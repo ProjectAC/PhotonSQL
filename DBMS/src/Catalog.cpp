@@ -50,7 +50,7 @@ namespace Photon
         return width;
     }
 
-    vector<Index> & Table::getIndicies()
+    vector<std::string> & Table::getIndicies()
     {
         return indicies;
     }
@@ -65,7 +65,7 @@ namespace Photon
         autoIncrement++;
     }
 
-    Table::Table(const vector<Column> & columns, const vector<Index> & indicies, uint autoIncrement) :
+    Table::Table(const vector<Column> & columns, const vector<std::string> & indicies, uint autoIncrement) :std
         columns(columns),
         indicies(indicies),
         autoIncrement(autoIncrement)
