@@ -1,10 +1,5 @@
 #include "../include/RecordManager.h"
-#include "../include/BufferManager.h"
-#include "../include/CatalogManager.h"
-#include "../include/Exception.h"
-#include <utility>
-#include <variant>
-#include <bitset>
+
 
 using namespace std;
 
