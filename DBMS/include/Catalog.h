@@ -41,7 +41,7 @@ namespace Photon
         std::vector<Column> &getColumns();
         uint hasColumn(const std::string &name);
         uint rowSize();
-        std::vector<Index> &getIndicies();
+        std::vector<std::string> &getIndicies();
         
         uint getIncrement();
         void count();
