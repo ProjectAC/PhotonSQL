@@ -2,6 +2,7 @@
 
 #include <variant>
 #include <vector>
+#include <set>
 #include "Definitions.h"
 
 namespace Photon
@@ -29,7 +30,6 @@ namespace Photon
 
     struct Index
     {
-        std::string name;
         std::string table;
         std::string column;
     };
@@ -41,17 +41,17 @@ namespace Photon
         std::vector<Column> &getColumns();
         uint hasColumn(const std::string &name);
         uint rowSize();
-        std::vector<std::string> &getIndicies();
+        std::set<std::string> &getIndicies();
         
         uint getIncrement();
         void count();
 
-        Table(const std::vector<Column> &columns, const std::vector<std::string> &indicies, uint autoIncrement);
+        Table(const std::vector<Column> &columns, const std::set<std::string> &indicies, uint autoIncrement);
 
     private:
 
         std::vector<Column> columns;
-        std::vector<std::string> indicies;
+        std::set<std::string> indicies;
         uint width;
         uint autoIncrement;
     };

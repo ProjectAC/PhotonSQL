@@ -19,7 +19,7 @@ namespace Photon
     byte *BufferManager::get(const std::string &fileName, uint id)
     {
         if (files.find(fileName) == files.end())
-            files.insert({fileName, FileBuffer(fileName)});
+            files.insert({fileName, fileName});
         return files[fileName].get(id);
     }
 
