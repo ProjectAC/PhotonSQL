@@ -177,7 +177,7 @@ namespace Photon
             Value columns(kArrayType);
             for (auto &c : t.second.getColumns())
             {
-                Value column;
+                Value column(kObjectType);
                 column.AddMember("name", GenericStringRef<char>(c.name.c_str()), allocator);
                 column.AddMember("type", c.type, allocator);
                 column.AddMember("length", c.length, allocator);
@@ -186,6 +186,7 @@ namespace Photon
                 columns.PushBack(column, allocator);
             }
             table.AddMember("columns", columns, allocator);
+            tables.PushBack(table, allocator);
         }
         d.AddMember("tables", tables, allocator);
 
