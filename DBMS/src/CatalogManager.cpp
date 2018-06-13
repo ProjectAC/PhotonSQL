@@ -18,6 +18,8 @@ using namespace rapidjson;
 
 namespace Photon
 {
+    CatalogManager *CatalogManager::instance = nullptr;
+
     CatalogManager &CatalogManager::getInstance()
     {
         return *CatalogManager::instance;
@@ -25,7 +27,8 @@ namespace Photon
 
     CatalogManager::CatalogManager()
     {
-        CatalogManager::instance = this;
+        if (instance == nullptr)
+            instance = this;
     }
 
     Table &CatalogManager::getTable(const std::string &name)
@@ -138,7 +141,7 @@ namespace Photon
                 columns.push_back(Column( { c["name"].GetString(), (AttributeType)c["type"].GetUint(), c["length"].GetUint(), c["notNull"].GetBool(), c["unique"].GetBool() } ));
             }
 
-            this->tables[name] = Table(columns, indicies[name], inc);
+            this->tables[name] = { columns, indicies[name], inc };
         }
 
         file.close();
@@ -156,9 +159,10 @@ namespace Photon
         for (auto &i : this->indicies)
         {
             Value index(kObjectType);
-            index.AddMember("name"  , i.first        , allocator);
-            index.AddMember("table" , i.second.table , allocator);
-            index.AddMember("column", i.second.column, allocator);
+            
+            index.AddMember("name"  , GenericStringRef<char>(i.first        .c_str()), allocator);
+            index.AddMember("table" , GenericStringRef<char>(i.second.table .c_str()), allocator);
+            index.AddMember("column", GenericStringRef<char>(i.second.column.c_str()), allocator);
             indicies.PushBack(index, allocator);
         }
         d.AddMember("indicies", indicies, allocator);
@@ -167,7 +171,7 @@ namespace Photon
         for (auto &t : this->tables)
         {
             Value table(kObjectType);
-            table.AddMember("name", t.first, allocator);
+            table.AddMember("name", GenericStringRef<char>(t.first.c_str()), allocator);
             table.AddMember("increment", t.second.getIncrement(), allocator);
 
             Value columns(kArrayType);

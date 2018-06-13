@@ -6,6 +6,10 @@ using namespace std;
 
 namespace Photon
 {
+    ///////////// IndexManager /////////////
+
+    IndexManager *IndexManager::instance = nullptr;
+
     IndexManager &IndexManager::getInstance()
     {
         return *IndexManager::instance;
@@ -13,7 +17,8 @@ namespace Photon
 
     IndexManager::IndexManager()
     {
-        IndexManager::instance = this;
+        if (instance == nullptr)
+            instance = this;
     }
 
     const IndexManager::IndexResult &IndexManager::fetch(const std::string &indexName, const Attribute &__begin, const Attribute &__end)
@@ -43,5 +48,12 @@ namespace Photon
         auto &dataSet = rm.traverse(index.table);
         for (auto &record : dataSet)
             insert(indexName, record.second[cid], record.first);
+    }
+
+    ///////////// IndexResult /////////////
+
+    IndexManager::IndexResult::IndexResult(const std::string &indexName, const Attribute &__begin, const Attribute & __end)
+    {
+
     }
 }

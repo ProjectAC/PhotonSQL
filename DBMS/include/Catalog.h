@@ -47,6 +47,7 @@ namespace Photon
         void count();
 
         Table(const std::vector<Column> &columns, const std::set<std::string> &indicies, uint autoIncrement);
+        Table() = default;
 
     private:
 

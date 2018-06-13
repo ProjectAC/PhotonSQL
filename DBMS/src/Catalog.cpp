@@ -12,11 +12,11 @@ namespace Photon
         if (a.index() != b.index())
             throw TypeMismatchException();
         
-        if (a.index == INTEGER)
+        if (a.index() == INTEGER)
             return get<Integer>(a) < get<Integer>(b);
-        else if (a.index == REAL)
+        else if (a.index() == REAL)
             return get<Real>(a) < get<Real>(b);
-        else if (a.index == STRING)
+        else if (a.index() == STRING)
             return get<String>(a) < get<String>(b);
         else
             throw UnknownTypeException();

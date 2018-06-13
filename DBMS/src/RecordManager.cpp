@@ -83,7 +83,7 @@ namespace Photon
 
     void RecordManager::encode(byte *p, const std::vector<Column> &columns, const Row &r)
     {
-        uint n = columns.size();
+        uint n = (uint)columns.size();
         if (n != r.size())
             throw RowLengthMismatchException();
 
@@ -92,12 +92,12 @@ namespace Photon
         
         writeBit(p, 0, true);
 
-        for (int i = 0; i < n; i++)
+        for (uint i = 0; i < n; i++)
         {
             auto &c = columns[i];
             auto &a = r[i];
 
-            if (r[i].index == NIL)
+            if (r[i].index() == NIL)
                 writeBit(p, i + 1, false);
             else
             {
@@ -115,9 +115,12 @@ namespace Photon
         }
     }
 
+    RecordManager *RecordManager::instance = nullptr;
+
     RecordManager::RecordManager()
     {
-        instance = this;
+        if (instance == nullptr)
+            instance = this;
     }
 
     RecordManager & RecordManager::getInstance()

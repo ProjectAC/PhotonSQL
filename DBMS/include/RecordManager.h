@@ -29,7 +29,7 @@ namespace Photon
 
         private:
 
-            const string &tableName;
+            const std::string &tableName;
             uint id;
         };
 

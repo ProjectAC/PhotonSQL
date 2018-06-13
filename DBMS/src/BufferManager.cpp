@@ -5,6 +5,7 @@ using namespace std;
 namespace Photon
 {
     ///////////// BufferManager /////////////
+    BufferManager *BufferManager::instance = nullptr;
 
     BufferManager & BufferManager::getInstance()
     {
@@ -13,14 +14,15 @@ namespace Photon
 
     BufferManager::BufferManager()
     {
-        BufferManager::instance = this;
+        if (instance == nullptr)
+            instance = this;
     }
 
     byte *BufferManager::get(const std::string &fileName, uint id)
     {
         if (files.find(fileName) == files.end())
-            files.insert({fileName, fileName});
-        return files[fileName].get(id);
+            files[fileName] = new FileBuffer(fileName);
+        return files[fileName]->get(id);
     }
 
     ///////////// FileBuffer /////////////

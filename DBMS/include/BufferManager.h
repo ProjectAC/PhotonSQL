@@ -64,6 +64,6 @@ namespace Photon
             std::array<BufferUnit*, 16> buffers;
         };
         
-        std::unordered_map<std::string, FileBuffer> files;
+        std::unordered_map<std::string, FileBuffer*> files;
     };
 }
