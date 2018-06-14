@@ -46,7 +46,7 @@ namespace Photon
     {
         auto &buffer = buffers[id & 0xF];
 
-        if (buffer->ID() != id)
+       // if (buffer->ID() != id)
             buffer->load(id);
 
         return buffer->content();
@@ -57,8 +57,17 @@ namespace Photon
 
     void BufferManager::FileBuffer::BufferUnit::load(uint id)
     {
-        file.seekg(id * SIZE, ios::beg);
-        file.read(buffer, SIZE);
+		file.seekg(0, ios::end);
+		size_t filesize = file.tellg();
+
+        file.seekp(id * SIZE, ios::beg);
+		if (filesize > id*SIZE + SIZE)
+			file.read(buffer, SIZE);
+		else {
+			file.read(buffer, (filesize - id * SIZE));
+			*(buffer + filesize - id * SIZE )= '\0';
+		}
+			
         this->id = id;
 #if defined LRUBUFFER
         counter = 0;
@@ -67,7 +76,7 @@ namespace Photon
 
     void BufferManager::FileBuffer::BufferUnit::save()
     {
-        file.seekp(id * SIZE, ios::beg);
+        file.seekg(id * SIZE, ios::beg);
         file.write(buffer, SIZE);
     }
 
