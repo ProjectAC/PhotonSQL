@@ -1,11 +1,6 @@
 #include "../include/CatalogManager.h"
 #include "../include/Exception.h"
 
-#include "rapidjson/rapidjson.h"  
-#include "rapidjson/document.h"  
-#include "rapidjson/writer.h"  
-#include "rapidjson/stringbuffer.h"  
-#include "rapidjson/prettywriter.h"  
 
 #include <unordered_map>
 #include <vector>
@@ -14,7 +9,6 @@
 #include <iostream>
 
 using namespace std;
-using namespace rapidjson;
 
 namespace Photon
 {
