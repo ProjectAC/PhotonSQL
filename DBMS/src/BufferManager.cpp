@@ -57,6 +57,7 @@ namespace Photon
 
     void BufferManager::FileBuffer::BufferUnit::load(uint id)
     {
+		/*
 		file.seekg(0, ios::end);
 		size_t filesize = file.tellg();
 
@@ -72,8 +73,9 @@ namespace Photon
 		}
 		else {
 			*buffer = '\0';
-		}
-	
+		}*/
+		file.seekp(id * SIZE, ios::beg);
+		file.read(buffer, SIZE);
 			
         this->id = id;
 #if defined LRUBUFFER
@@ -83,11 +85,12 @@ namespace Photon
 
     void BufferManager::FileBuffer::BufferUnit::save()
     {
+		/*
 		file.seekg(0, ios::end);
 		size_t filesize = file.tellg();
 		
 		if (filesize >= id * SIZE) 
-			file.seekg(id * SIZE, ios::beg);
+			
 		else 
 			file.seekg(0, ios::end);			
 		
@@ -95,6 +98,9 @@ namespace Photon
 		for (i = 0; i < SIZE&&*(buffer + i) != '\0'; i++);
 		
 		file.write(buffer, i);
+		*/
+		file.seekg(id * SIZE, ios::beg);
+		file.write(buffer, SIZE);
     }
 
     byte *BufferManager::FileBuffer::BufferUnit::content()
