@@ -27,7 +27,7 @@ namespace Photon
             uint cn1, cn2;
         };
 
-        bool satisfy(const std::vector<Column> &columns, const Row &row);
+        bool satisfy(const std::vector<Column> &columns, const Row &row) const;
         const std::vector<ConditionItem> &getItems();
 
     private:

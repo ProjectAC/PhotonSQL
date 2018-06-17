@@ -191,4 +191,31 @@ namespace Photon
         file << buffer.GetString();
         file.close();
     }
+
+
+
+	//////////
+	std::vector<Row> Photon::CatalogManager::select(const Condition & c)
+	{
+		std::vector<Row> result;
+		std::vector<Row> temp;
+		for (auto &i : tables) {
+			temp.clear();
+			temp = i.second.select(c);
+			for (auto &j : temp) 
+				result.push_back(j);
+		}
+		return result;
+	}
+
+	uint Photon::CatalogManager::Delete(const Condition & c)
+	{	
+		uint numdelete = 0;
+		for (auto &i : tables) {
+			numdelete += i.second.Delete(c);
+		}
+		return numdelete;
+	}
+
+
 }

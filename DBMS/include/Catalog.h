@@ -4,6 +4,7 @@
 #include <vector>
 #include <set>
 #include "Definitions.h"
+#include "Condition.h"
 
 namespace Photon
 {
@@ -48,7 +49,10 @@ namespace Photon
 
         Table(const std::vector<Column> &columns, const std::set<std::string> &indicies, uint autoIncrement);
         Table() = default;
-
+		//////////
+		void addRow(const std::vector<Row>& res);
+		std::vector<Row> select(const Condition & c);
+		uint Delete(const Condition & c);
     private:
 
         std::vector<Column> columns;

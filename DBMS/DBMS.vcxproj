@@ -127,6 +127,7 @@
     <ClInclude Include="include\RecordManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DBMS.cpp" />
     <ClCompile Include="src\BufferManager.cpp" />
     <ClCompile Include="src\Catalog.cpp" />
     <ClCompile Include="src\CatalogManager.cpp" />

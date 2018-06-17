@@ -6,7 +6,7 @@
 #include "rapidjson/writer.h"  
 #include "rapidjson/stringbuffer.h"  
 #include "rapidjson/prettywriter.h"  
-
+#include "Condition.h"
 #include "Catalog.h"
 using namespace rapidjson;
 
@@ -30,7 +30,9 @@ namespace Photon
         // JSON!
         void loadCatalog(const std::string &fileName);
         void saveCatalog(const std::string &fileName);
-
+		/////
+		std::vector<Row> select(const Condition & c);
+		uint Delete(const Condition & c);
     private:
 
         static CatalogManager *instance;
