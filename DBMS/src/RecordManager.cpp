@@ -53,33 +53,49 @@ namespace Photon
         return ((*(p + pos / 8)) >> (pos & 7)) & 1;
     }
 
-    const Row & RecordManager::decode(const vector<Column> &columns, byte *p)
-    {
-        if (!readBit(p, 0))
-            return Row();
+	const Row & RecordManager::decode(const vector<Column> &columns, byte *p)
+	{
+		if (!readBit(p, 0))
+			return Row();
 
-        Row res;
-        uint i = 1;
-        byte *t = p;
+		Row res;
+		uint i = 1;
+		byte *t = p;
 
-        for (auto &c : columns)
-        {
-            if (!readBit(p, i))
-                res.push_back( Attribute(monostate()) );
-            else if (c.type == INTEGER)
-                res.push_back( Attribute(*(Integer*)(t)) );
-            else if (c.type == REAL)
-                res.push_back( Attribute(*(Real*)(t)) );
-            else if (c.type == STRING)
-                res.push_back( Attribute(String(t)) );
-            else
-                throw UnknownTypeException();
-            t += c.length;
-            i++;
-        }
+		for (auto &c : columns)
+		{
+			if (!readBit(p, i)) {
+				Attribute attr1;
+				attr1 = monostate();
+				res.push_back(attr1);
+			}
+			//res.push_back( Attribute(monostate()) );
+			else if (c.type == INTEGER) {
+				Attribute attr1;
+				attr1 = *(Integer*)(t);
+				res.push_back(attr1);
+			}
+			// res.push_back( Attribute(*(Integer*)(t)) );
+			else if (c.type == REAL) {
+				Attribute attr1;
+				attr1 = *(Integer*)(t);
+				res.push_back(attr1);
+			}
+			//res.push_back( Attribute(*(Real*)(t)) );
+			else if (c.type == STRING) {
+				Attribute attr1;
+				attr1 = String(t);
+				res.push_back(attr1);
+			}
+			// res.push_back( Attribute(String(t)) );
+			else
+				throw UnknownTypeException();
+			t += c.length;
+			i++;
+		}
 
-        return res;
-    }
+		return res;
+	}
 
     void RecordManager::encode(byte *p, const std::vector<Column> &columns, const Row &r)
     {
