@@ -73,6 +73,9 @@
     <ReferencePath>$(ReferencePath)</ReferencePath>
     <IncludePath>E:\Tools\VC\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>E:\Tools\VC\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -85,6 +88,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,6 +131,7 @@
     <ClInclude Include="include\RecordManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\BpTree.cpp" />
     <ClCompile Include="src\BufferManager.cpp" />
     <ClCompile Include="src\Catalog.cpp" />
     <ClCompile Include="src\CatalogManager.cpp" />

@@ -6,6 +6,7 @@ using namespace std;
 
 namespace Photon
 {
+    /*
     ///////////// IndexManager /////////////
 
     IndexManager *IndexManager::instance = nullptr;
@@ -21,7 +22,7 @@ namespace Photon
             instance = this;
     }
 
-    const IndexManager::IndexResult &IndexManager::fetch(const std::string &indexName, const Attribute &__begin, const Attribute &__end)
+    IndexManager::IndexResult IndexManager::fetch(const std::string &indexName, const Attribute &__begin, const Attribute &__end)
     {
         return { indexName, __begin, __end };
     }
@@ -31,7 +32,7 @@ namespace Photon
 
     }
 
-    void IndexManager::remove(const std::string &indexName, const Attribute &id)
+    void IndexManager::erase(const std::string &indexName, const Attribute &id)
     {
 
     }
@@ -56,4 +57,5 @@ namespace Photon
     {
 
     }
+    */
 }

@@ -36,8 +36,8 @@ namespace Photon
         class RecordResult
         {
         public:
-            const RecordIterator & begin() const;
-            const RecordIterator & end() const;
+            RecordIterator begin() const;
+            RecordIterator end() const;
             RecordResult(const std::string &tableName, uint __begin, uint __end);
         
         private:
@@ -46,15 +46,15 @@ namespace Photon
             uint beginID, endID;
         };
 
-        const RecordResult &traverse(const std::string &tableName);
-        const Row & fetch(const std::string &tableName, uint id);
+        RecordResult traverse(const std::string &tableName);
+        Row fetch(const std::string &tableName, uint id);
         void insert(const std::string &tableName, const Row &row);
 
         RecordManager();
 
     private:
         
-        const Row & decode(const std::vector<Column> &columns, byte *p);
+        Row decode(const std::vector<Column> &columns, byte *p);
         void encode(byte *p, const std::vector<Column> &columns, const Row &r);
         
         void writeBit(byte *p, uint pos, bool value);

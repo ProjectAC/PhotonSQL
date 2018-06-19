@@ -8,6 +8,7 @@
 
 namespace Photon
 {
+    /*
     class IndexManager
     {
     public:
@@ -38,11 +39,12 @@ namespace Photon
 
         const IndexResult &fetch(const std::string &indexName, const Attribute &__begin, const Attribute &__end);
         void insert(const std::string &indexName, const Attribute &id, uint handle);
-        void remove(const std::string &indexName, const Attribute &id);
+        void erase(const std::string &indexName, const Attribute &id);
         void build(const std::string &indexName);
 
     private:
         
         static IndexManager *instance;
     };
+    */
 }

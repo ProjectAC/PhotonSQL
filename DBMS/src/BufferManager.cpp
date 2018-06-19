@@ -46,7 +46,7 @@ namespace Photon
     {
         auto &buffer = buffers[id & 0xF];
 
-       // if (buffer->ID() != id)
+        if (buffer->ID() != id)
             buffer->load(id);
 
         return buffer->content();
@@ -59,22 +59,23 @@ namespace Photon
     {
 		file.seekg(0, ios::end);
 		size_t filesize = file.tellg();
+        
+        if (filesize == (size_t)-1)
+            filesize = 0;
 
-       
 		if (filesize >= id * SIZE + SIZE) {
 			file.seekp(id * SIZE, ios::beg);
 			file.read(buffer, SIZE);
 		}
-		else if (filesize < id * SIZE + SIZE && filesize > id*SIZE) {
+		else if (filesize < id * SIZE + SIZE && filesize > id * SIZE) {
+            memset(buffer, 0, SIZE);
 			file.seekp(id * SIZE, ios::beg);
 			file.read(buffer, (filesize - id * SIZE));
-			*(buffer + filesize - id * SIZE) = '\0';
 		}
 		else {
-			*buffer = '\0';
+            memset(buffer, 0, SIZE);
 		}
-	
-			
+		
         this->id = id;
 #if defined LRUBUFFER
         counter = 0;
@@ -88,13 +89,17 @@ namespace Photon
 		
 		if (filesize >= id * SIZE) 
 			file.seekg(id * SIZE, ios::beg);
-		else 
-			file.seekg(0, ios::end);			
+        else
+        {
+            uint length = id * SIZE - filesize;
+            char *p = new char[length];
+            file.seekg(0, ios::end);
+            file.write(p, length);
+            file.seekg(0, ios::end);
+            delete[] p;
+        }
 		
-		int i;
-		for (i = 0; i < SIZE&&*(buffer + i) != '\0'; i++);
-		
-		file.write(buffer, i);
+		file.write(buffer, SIZE);
     }
 
     byte *BufferManager::FileBuffer::BufferUnit::content()
@@ -123,6 +128,7 @@ namespace Photon
         file(stream)
     {
         buffer = new byte[SIZE];
+        id = -1;
     }
 
     BufferManager::FileBuffer::BufferUnit::~BufferUnit()

@@ -7,12 +7,12 @@ namespace Photon
 {
     ///////////// RecordManager /////////////
     
-    const RecordManager::RecordResult &RecordManager::traverse(const std::string &tableName)
+    RecordManager::RecordResult RecordManager::traverse(const std::string &tableName)
     {
         return RecordResult(tableName, 0, CatalogManager::getInstance().getTable(tableName).getIncrement());
     }
 
-    const Row & RecordManager::fetch(const std::string &tableName, uint id)
+    Row RecordManager::fetch(const std::string &tableName, uint id)
     {
         Table &table = CatalogManager::getInstance().getTable(tableName);
         uint rowSize = table.rowSize();
@@ -53,7 +53,7 @@ namespace Photon
         return ((*(p + pos / 8)) >> (pos & 7)) & 1;
     }
 
-	const Row & RecordManager::decode(const vector<Column> &columns, byte *p)
+	Row RecordManager::decode(const vector<Column> &columns, byte *p)
 	{
 		if (!readBit(p, 0))
 			return Row();
@@ -119,11 +119,21 @@ namespace Photon
             {
                 writeBit(p, i + 1, true);
                 if (c.type == INTEGER)
-                    memcpy(t, &a, sizeof(Integer));
+                {
+                    Integer tmp = get<Integer>(a);
+                    memcpy(t, &tmp, sizeof(Integer));
+                }
                 else if (c.type == REAL)
-                    memcpy(t, &a, sizeof(Real));
+                {
+                    Real tmp = get<Real>(a);
+                    memcpy(t, &tmp, sizeof(Real));
+                }
                 else if (c.type == STRING)
-                    memcpy(t, &a, sizeof(char) * c.length);
+                {
+                    memset(t, 0, sizeof(char) * c.length);
+                    const string &tmp = get<String>(a);
+                    memcpy(t, tmp.c_str(), sizeof(char) * tmp.length());
+                }
                 else
                     throw UnknownTypeException();
             }
@@ -165,16 +175,17 @@ namespace Photon
     const RecordManager::RecordIterator & RecordManager::RecordIterator::operator ++()
     {
         for (id++; RecordManager::getInstance().fetch(tableName, id).size(); id++);
+        return *this;
     }
 
     ///////////// RecordResult /////////////
 
-    const RecordManager::RecordIterator & RecordManager::RecordResult::begin() const
+    RecordManager::RecordIterator RecordManager::RecordResult::begin() const
     {
         return RecordIterator(tableName, beginID);
     }
 
-    const RecordManager::RecordIterator & RecordManager::RecordResult::end() const
+    RecordManager::RecordIterator RecordManager::RecordResult::end() const
     {
         return RecordIterator(tableName, endID);
     }
