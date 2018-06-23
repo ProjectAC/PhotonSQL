@@ -1,14 +1,19 @@
 #include "include/CatalogManager.h"
+#include "include/IndexManager.h"
+#include "include/RecordManager.h"
 #include "include/BpTree.h"
 #include <iostream>
 
 using namespace std;
 using namespace Photon;
 
+BufferManager bm;
+IndexManager im;
+CatalogManager cm;
+RecordManager rm;
+
 void testCatalog()
 {
-    CatalogManager cm;
-
     /*
     vector<Column> columns;
     columns.push_back({
@@ -51,9 +56,7 @@ void testCatalog()
 
 void testBpTree()
 {
-    BufferManager bm;
-    BpTree tree("Storage/test.idx", AttributeType::STRING, 1200);
-    tree.debug();
+    BpTree tree("../Storage/indicies/test.idx", AttributeType::STRING, 1200);
     for (int i = 1; i <= 12; i++)
     {
         //printf("=============================================\n");
@@ -66,9 +69,7 @@ void testBpTree()
     }
 
     tree.erase("d");
-    tree.debug();
     tree.erase("f");
-    tree.debug();
     tree.erase("j");
 
     for (auto x = BpIterator(&tree, Attribute("d")), y = BpIterator(&tree, Attribute("k")); x != y; ++x)
@@ -79,9 +80,82 @@ void testBpTree()
     printf("\n");
 }
 
+void testBpTreeLoad()
+{
+    BpTree tree("../Storage/indicies/test.idx");
+    tree.debug();
+
+    for (auto x = BpIterator(&tree, Attribute("d")), y = BpIterator(&tree, Attribute("k")); x != y; ++x)
+    {
+        auto t = *x;
+        printf("(%s, %u) ", get<string>(t.first).c_str(), t.second);
+    }
+    printf("\n");
+}
+
+void testIndexManager()
+{
+    auto res = im.fetch("test", Attribute("c"), Attribute());
+
+    for (auto &r : res)
+    {
+        printf("(%s, %u) ", get<string>(r.first).c_str(), r.second);
+    }
+    printf("\n");
+}
+
+void testRecordManager()
+{
+    cm.loadCatalog("../Storage/test.json");
+    
+    /*
+    Row row;
+    row.push_back(Attribute("sol"));
+    row.push_back(Attribute("SOL"));
+    row.push_back(Attribute(Real(19.0)));
+    
+    rm.insert("Person", row);
+    
+    row = rm.fetch("Person", 0);
+    cout << row[2].index() << endl;
+    cout << get<string>(row[0]) << endl;
+    cout << get<string>(row[1]) << endl;
+    cout << get<Real>(row[2]) << endl;
+    */
+
+    for (int i = 0; i < 10; i++)
+    {
+        Row row;
+        string s;
+        s = 'a' + i;
+        row.push_back(Attribute(s));
+        s = 'A' + i;
+        row.push_back(Attribute(s));
+        row.push_back(Attribute(Real(20)));
+        rm.insert("Person", row);
+    }
+
+    cout << cm.getTable("Person").getIncrement() << endl;
+    auto &x = rm.traverse("Person");
+    auto a = x.begin();
+    auto b = x.end();
+
+    for (auto &t : x)
+    {
+        cout << t.first << " ";
+        cout << get<string>(t.second[0]) << " ";
+        cout << get<string>(t.second[1]) << " ";
+        cout << get<Real>(t.second[2]) << endl;
+    }
+}
+
 int main()
 {
-    testBpTree();
+    //testBpTree();
+    //testBpTreeLoad();
+    //testCatalog();
+    //testIndexManager();
+    testRecordManager();
 
     system("pause");
 

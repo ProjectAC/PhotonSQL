@@ -18,6 +18,12 @@ namespace Photon
             instance = this;
     }
 
+    BufferManager::~BufferManager()
+    {
+        for (auto &f : files)
+            delete f.second;
+    }
+
     byte *BufferManager::get(const std::string &fileName, uint id)
     {
         if (files.find(fileName) == files.end())
@@ -27,9 +33,11 @@ namespace Photon
 
     ///////////// FileBuffer /////////////
 
-    BufferManager::FileBuffer::FileBuffer(std::string fileName) :
-        file(fileName, ios::in | ios::out | ios::ate | ios::binary)
+    BufferManager::FileBuffer::FileBuffer(std::string fileName)
     {
+        file.open(fileName, ios::app);
+        file.close();
+        file.open(fileName, ios::in | ios::out | ios::ate | ios::binary);
         for (auto &b : buffers)
             b = new BufferUnit(file);
     }
@@ -38,6 +46,7 @@ namespace Photon
     {
         for (auto &b : buffers)
             delete b;
+        file.close();
     }
 
 #if defined LRUBUFFER
@@ -133,6 +142,8 @@ namespace Photon
 
     BufferManager::FileBuffer::BufferUnit::~BufferUnit()
     {
+        if (id != uint(-1))
+            save();
         delete[] buffer;
     }
 

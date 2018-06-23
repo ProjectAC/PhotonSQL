@@ -7,4 +7,5 @@ namespace Photon
     class RowLengthMismatchException : std::exception {};
     class UnknownTypeException : std::exception {};
     class ObjectNotFountException : std::exception {};
+    class SQLException : std::exception {};
 }

@@ -27,6 +27,7 @@ namespace Photon
 
         BpTree(std::string name);
         BpTree(std::string name, AttributeType type, uint keyLength);
+        ~BpTree();
 
     private:
 
@@ -172,6 +173,14 @@ namespace Photon
     class BpIterator
     {
     public:
+
+        BpIterator(const BpIterator &x) :
+            tree(x.tree),
+            p(x.p ? tree->load(x.p->id) : nullptr),
+            pos(x.pos)
+        {
+        }
+
         BpIterator(BpTree *tree, const BpTree::Key &key) :
             tree(tree)
         {

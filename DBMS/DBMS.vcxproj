@@ -131,10 +131,12 @@
     <ClInclude Include="include\RecordManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="src\BpTree.cpp" />
     <ClCompile Include="src\BufferManager.cpp" />
     <ClCompile Include="src\Catalog.cpp" />
     <ClCompile Include="src\CatalogManager.cpp" />
+    <ClCompile Include="src\Condition.cpp" />
     <ClCompile Include="src\IndexManager.cpp" />
     <ClCompile Include="src\RecordManager.cpp" />
     <ClCompile Include="test.cpp" />

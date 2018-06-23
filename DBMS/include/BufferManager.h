@@ -15,6 +15,7 @@ namespace Photon
 
         static BufferManager &getInstance();
         BufferManager();
+        ~BufferManager();
 
         byte *get(const std::string &fileName, uint id);
 

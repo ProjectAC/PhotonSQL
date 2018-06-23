@@ -24,8 +24,8 @@ namespace Photon
             RecordIterator(const std::string &tableName, uint id);
 
             bool operator != (const RecordIterator &i) const;
-            std::pair<uint, const Row &> operator *() const;
-            const RecordIterator & operator ++();
+            std::pair<uint, Row> operator *() const;
+            RecordIterator & operator ++();
 
         private:
 
@@ -48,7 +48,7 @@ namespace Photon
 
         RecordResult traverse(const std::string &tableName);
         Row fetch(const std::string &tableName, uint id);
-        void insert(const std::string &tableName, const Row &row);
+        uint insert(const std::string &tableName, const Row &row);
 
         RecordManager();
 

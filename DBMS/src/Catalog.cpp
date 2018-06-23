@@ -9,17 +9,40 @@ namespace Photon
 
     bool operator <(const Attribute &a, const Attribute &b)
     {
+        /*
         if (a.index() != b.index())
             throw TypeMismatchException();
+        */
         
         if (a.index() == INTEGER)
-            return get<Integer>(a) < get<Integer>(b);
+        {
+            if (b.index() == INTEGER)
+                return get<Integer>(a) < get<Integer>(b);
+            else if (b.index() == REAL)
+                return get<Integer>(a) < get<Real>(b);
+            else
+                throw TypeMismatchException();
+        }
         else if (a.index() == REAL)
-            return get<Real>(a) < get<Real>(b);
+        {
+            if (b.index() == INTEGER)
+                return get<Real>(a) < get<Integer>(b);
+            else if (b.index() == REAL)
+                return get<Real>(a) < get<Real>(b);
+            else
+                throw TypeMismatchException();
+        }
         else if (a.index() == STRING)
-            return get<String>(a) < get<String>(b);
+        {
+            if (b.index() == STRING)
+                return get<String>(a) < get<String>(b);
+            else
+                throw TypeMismatchException();
+        }
         else
+        {
             throw UnknownTypeException();
+        }
     }
 
     /////////////////// Table ///////////////////
@@ -73,5 +96,6 @@ namespace Photon
         width = 0;
         for (auto &c : columns)
             width += c.length;
+        width += columns.size() / 8 + 1;
     }
 }

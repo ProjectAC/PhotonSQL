@@ -25,8 +25,16 @@ namespace Photon
         printf("\n");
     }
 
-    BpTree::BpTree(std::string name)
+    BpTree::BpTree(std::string name) :
+        name(name)
     {
+        char *p = BufferManager::getInstance().get(name, 0);
+        memcpy(&root, p, sizeof(root)); p += sizeof(root);
+        memcpy(&type, p, sizeof(type)); p += sizeof(type);
+        memcpy(&keyLength, p, sizeof(keyLength)); p += sizeof(keyLength);
+        memcpy(&nodeCount, p, sizeof(nodeCount));
+
+        degree = (BufferManager::SIZE - 9) / (keyLength + sizeof(uint));
     }
 
     BpTree::BpTree(std::string name, AttributeType type, uint keyLength):
@@ -42,6 +50,11 @@ namespace Photon
         auto node = new Node(this, 1, true);
         node->save(BufferManager::getInstance().get(name, 1));
         delete node;
+    }
+
+    BpTree::~BpTree()
+    {
+        save();
     }
 
     void BpTree::save()

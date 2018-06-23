@@ -1,5 +1,5 @@
 #include "../include/RecordManager.h"
-
+#include "iostream"
 
 using namespace std;
 
@@ -21,23 +21,24 @@ namespace Photon
         uint innerID = id % rowsPerBlock;
 
         auto &buffer = BufferManager::getInstance();
-        byte *p = buffer.get(tableName, blockID);
+        byte *p = buffer.get("../Storage/records/" + tableName + ".rcd", blockID);
 
-        return decode(table.getColumns(), p + innerID);
+        return decode(table.getColumns(), p + innerID * rowSize);
     }
 
-    void RecordManager::insert(const std::string &tableName, const Row &row)
+    uint RecordManager::insert(const std::string &tableName, const Row &row)
     {
         Table &table = CatalogManager::getInstance().getTable(tableName);
-        uint id = table.getIncrement();
+        uint id = table.getIncrement(); table.count();
         uint rowSize = table.rowSize();
         uint rowsPerBlock = BufferManager::SIZE / rowSize;
         uint blockID = id / rowsPerBlock;
         uint innerID = id % rowsPerBlock;
 
         auto &buffer = BufferManager::getInstance();
-        byte *p = buffer.get(tableName, blockID);
-        encode(p + innerID, table.getColumns(), row);
+        byte *p = buffer.get("../Storage/records/" + tableName + ".rcd", blockID);
+        encode(p + innerID * rowSize, table.getColumns(), row);
+        return id;
     }
 
     void RecordManager::writeBit(byte *p, uint pos, bool value)
@@ -60,7 +61,7 @@ namespace Photon
 
 		Row res;
 		uint i = 1;
-		byte *t = p;
+		byte *t = p + columns.size() / 8 + 1;
 
 		for (auto &c : columns)
 		{
@@ -78,7 +79,7 @@ namespace Photon
 			// res.push_back( Attribute(*(Integer*)(t)) );
 			else if (c.type == REAL) {
 				Attribute attr1;
-				attr1 = *(Integer*)(t);
+				attr1 = *(Real*)(t);
 				res.push_back(attr1);
 			}
 			//res.push_back( Attribute(*(Real*)(t)) );
@@ -167,14 +168,18 @@ namespace Photon
         return id != i.id || tableName != i.tableName;
     }
 
-    std::pair<uint, const Row &> RecordManager::RecordIterator::operator *() const
+    std::pair<uint, Row> RecordManager::RecordIterator::operator *() const
     {
         return { id, RecordManager::getInstance().fetch(tableName, id) };
     }
 
-    const RecordManager::RecordIterator & RecordManager::RecordIterator::operator ++()
+    RecordManager::RecordIterator & RecordManager::RecordIterator::operator ++()
     {
-        for (id++; RecordManager::getInstance().fetch(tableName, id).size(); id++);
+        CatalogManager &cm = CatalogManager::getInstance();
+        RecordManager &rm = RecordManager::getInstance();
+        uint size = cm.getTable(tableName).getIncrement();
+          
+        for (id++; id < size && !rm.fetch(tableName, id).size(); id++);
         return *this;
     }
 

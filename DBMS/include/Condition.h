@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 #include "Catalog.h"
 
 namespace Photon
@@ -21,17 +22,30 @@ namespace Photon
 
         struct ConditionItem
         {
-            std::string col1, col2;
+            Attribute a1, a2;
+            int i1, i2;
             Relation relation;
-            Attribute value;
-            uint cn1, cn2;
         };
 
         bool satisfy(const std::vector<Column> &columns, const Row &row);
-        const std::vector<ConditionItem> &getItems();
+		void clear();
+        void add(const ConditionItem &item);
+        //const std::vector<ConditionItem> &getItems();
+        const std::string getAvailableIndex();
+        void setTable(std::string name);
 
     private:
 
+        std::string tableName;
         std::vector<ConditionItem> conditions;
+    };
+    
+    class SQL
+    {
+    public:
+        std::vector<std::string> split;
+        SQL(std::string sql);
+
+        Condition getCondition();
     };
 }
