@@ -2,6 +2,7 @@
 #include "include/IndexManager.h"
 #include "include/RecordManager.h"
 #include "include/BpTree.h"
+#include "include/Condition.h"
 #include <iostream>
 
 using namespace std;
@@ -149,13 +150,25 @@ void testRecordManager()
     }
 }
 
+void testSQL()
+{
+    cm.loadCatalog("../Storage/test.json");
+
+    //SQL sql = "select * from Person where id = 'SOL' and age < 20;";
+    SQL sql = "insert into Person values ('sol', 'sol', 19), ('xiang', 'xiang', 19);";
+    cout << sql.getTable() << endl;
+    auto &t = sql.getRows();
+}
+
 int main()
 {
     //testBpTree();
     //testBpTreeLoad();
     //testCatalog();
     //testIndexManager();
-    testRecordManager();
+    //testRecordManager();
+
+    testSQL();
 
     system("pause");
 

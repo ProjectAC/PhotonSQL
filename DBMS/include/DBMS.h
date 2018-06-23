@@ -4,6 +4,7 @@
 #include <rapidjson/writer.h>
 #include <rapidjson/stringbuffer.h>
 #include "Catalog.h"
+#include "Condition.h"
 
 namespace Photon
 {

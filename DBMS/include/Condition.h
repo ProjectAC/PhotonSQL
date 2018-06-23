@@ -30,22 +30,39 @@ namespace Photon
         bool satisfy(const std::vector<Column> &columns, const Row &row);
 		void clear();
         void add(const ConditionItem &item);
-        //const std::vector<ConditionItem> &getItems();
-        const std::string getAvailableIndex();
-        void setTable(std::string name);
+
+        void setIndex(std::string index);
+        std::string getIndex();
 
     private:
 
-        std::string tableName;
         std::vector<ConditionItem> conditions;
+        std::string index;
     };
     
     class SQL
     {
-    public:
         std::vector<std::string> split;
+
+    public:
+
+        enum Verb
+        {
+            NOTHING,
+            SELECT,
+            INSERT,
+            DELETE,
+            CREATE_TABLE,
+            CREATE_INDEX,
+            DROP_TABLE,
+            DROP_INDEX
+        };
+
         SQL(std::string sql);
 
+        std::string getTable();
+        Verb getVerb();
         Condition getCondition();
+        std::vector<Row> SQL::getRows();
     };
 }

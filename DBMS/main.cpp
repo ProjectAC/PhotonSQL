@@ -8,6 +8,7 @@
 using namespace Photon;
 using namespace std;
 
+/*
 string readSQL()
 {
     int i;
@@ -34,3 +35,4 @@ int main()
 
     return 0;
 }
+*/
