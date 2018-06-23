@@ -21,6 +21,12 @@ namespace Photon
             instance = this;
     }
 
+    IndexManager::~IndexManager()
+    {
+        for (auto &tree : indicies)
+            delete tree.second;
+    }
+
     IndexManager::IndexResult IndexManager::fetch(const std::string &indexName, const Attribute &__begin, const Attribute &__end)
     {
         return { findIndex(indexName), __begin, __end };
@@ -45,9 +51,11 @@ namespace Photon
         Table table = cm.getTable(index.table);
         uint cid = table.hasColumn(index.column);
 
+        BpTree *tree = indicies[indexName] = new BpTree("../Storage/indicies/" + indexName + ".idx", table.getColumn(cid).type, table.getColumn(cid).length);
+
         auto &dataSet = rm.traverse(index.table);
         for (auto &record : dataSet)
-            insert(indexName, record.second[cid], record.first);
+            tree->insert(record.second[cid], record.first);
     }
 
     BpTree *IndexManager::findIndex(std::string name)

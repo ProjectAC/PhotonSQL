@@ -14,6 +14,7 @@ namespace Photon
 
         static IndexManager &getInstance();
         IndexManager();
+        ~IndexManager();
 
         class IndexResult
         {

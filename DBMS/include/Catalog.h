@@ -18,6 +18,7 @@ namespace Photon
     typedef std::variant<std::monostate, Integer, Real, String> Attribute;
     typedef std::vector<Attribute> Row;
     bool operator <(const Attribute &a, const Attribute &b);
+    std::ostream & operator<<(std::ostream &out, const Attribute &a);
     
     struct Column
     {
@@ -44,6 +45,8 @@ namespace Photon
         std::set<std::string> &getIndicies();
         
         uint getIncrement();
+        void addIndex(std::string s);
+        void removeIndex(std::string s);
         void count();
 
         Table(const std::vector<Column> &columns, const std::set<std::string> &indicies, uint autoIncrement);

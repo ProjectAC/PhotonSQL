@@ -55,15 +55,21 @@ namespace Photon
     void CatalogManager::createIndex(const std::string &indexName, const std::string &tableName, const std::string columnName)
     {
         indicies.insert({ indexName, {tableName, columnName} });
+        getTable(tableName).addIndex(indexName);
     }
 
     void CatalogManager::dropTable(const std::string &tableName)
     {
+        auto &ix = getTable(tableName).getIndicies();
+        for (auto &i : ix)
+            indicies.erase(i);
+
         tables.erase(tableName);
     }
 
     void CatalogManager::dropIndex(const std::string &indexName)
     {
+        getTable(indicies[indexName].table).removeIndex(indexName);
         indicies.erase(indexName);
     }
 
@@ -98,6 +104,9 @@ namespace Photon
     {
         ifstream file(fileName);
         string json, tmp;
+
+        if (file.fail())
+            return;
 
         while (file.good())
         {

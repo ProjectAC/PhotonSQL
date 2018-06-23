@@ -1,5 +1,6 @@
 #include "../include/Catalog.h"
 #include "../include/Exception.h"
+#include <iostream>
 
 using namespace std;
 
@@ -35,7 +36,10 @@ namespace Photon
         else if (a.index() == STRING)
         {
             if (b.index() == STRING)
-                return get<String>(a) < get<String>(b);
+            {
+                // cout << get<String>(a).c_str() << " " << get<String>(b).c_str() << " " << strcmp(get<String>(a).c_str(), get<String>(b).c_str()) << endl;
+                return strcmp(get<String>(a).c_str(), get<String>(b).c_str()) < 0;
+            }
             else
                 throw TypeMismatchException();
         }
@@ -43,6 +47,27 @@ namespace Photon
         {
             throw UnknownTypeException();
         }
+    }
+
+    std::ostream & operator<<(std::ostream &out, const Attribute &a)
+    {
+        if (a.index() == INTEGER)
+        {
+            out << get<Integer>(a);
+        }
+        else if (a.index() == REAL)
+        {
+            out << get<Real>(a);
+        }
+        else if (a.index() == STRING)
+        {
+            out << get<String>(a).c_str();
+        }
+        else
+        {
+            out << "Null";
+        }
+        return out;
     }
 
     /////////////////// Table ///////////////////
@@ -76,6 +101,16 @@ namespace Photon
     set<string> & Table::getIndicies()
     {
         return indicies;
+    }
+
+    void Table::addIndex(string s)
+    {
+        indicies.insert(s);
+    }
+
+    void Table::removeIndex(string s)
+    {
+        indicies.erase(s);
     }
 
     uint Table::getIncrement()

@@ -2,15 +2,18 @@
 
 namespace Photon {
 
-	std::vector<Row> Photon::DBMS::Select(const String &table, const Condition &c) {
+	std::vector<Row> Photon::DBMS::Select(const String &table, const Condition &c)
+    {
 		String indexname;
 		std::vector<Row> result;
-		if ()//”–ø…”√index
+
+        Table &temptable = CatalogManager::getInstance().getTable(table);
+
+		if ((indexname = c.getIndex()) != "")
 		{
-			auto &item = IndexManager::getInstance().fetch(indexname, Attribute(), Attribute());
+			auto &item = IndexManager::getInstance().fetch(indexname, c.getLeft(), c.getRight());
 			for (auto &i : item) {
 				auto temprow = RecordManager::getInstance().fetch(table, i.second);
-				Table temptable = CatalogManager::getInstance().getTable(table);
 				if (c.satisfy(temptable.getColumns(), temprow))
 					result.push_back(temprow);
 			}
@@ -19,38 +22,53 @@ namespace Photon {
 		{
 			auto &item = RecordManager::getInstance().traverse(table);
 			for (auto &i : item) {
-				Table temp = CatalogManager::getInstance().getTable(table);
-				if (c.satisfy(temp.getColumns(), i.second))
+				if (c.satisfy(temptable.getColumns(), i.second))
 					result.push_back(i.second);
 			}
 		}
 		return result;
 	}
 
-
-
 	uint Photon::DBMS::Insert(const std::string & table, const std::vector<Row>& res)
-	{	
+	{
 		uint num = 0;
 		uint id;
-		for (auto &i : res) {
-			id = RecordManager::getInstance().insert(table, i);
-			auto temp = CatalogManager::getInstance().getTable(table).getIndicies();
-			for (auto &j : temp) {
-				IndexManager::getInstance().insert(j, i[id], id);
-			}
-			num++;
+        auto &t = cm.getTable(table);
+        auto &temp = t.getIndicies();
+		for (auto &i : res)
+        {
+			num += ((id = rm.insert(table, i)) != 0);
+			for (auto &j : temp)
+				im.insert(j, i[t.hasColumn(cm.getIndex(j).column)], id);
 		}
 		return num;
 	}
 
-
-
 	uint Photon::DBMS::Delete(const String &table, const Condition & c)
 	{
-		
-		
+        String indexname;
+        int res = 0;
 
+        Table &temptable = cm.getTable(table);
+
+        if ((indexname = c.getIndex()) != "")
+        {
+            auto &item = im.fetch(indexname, c.getLeft(), c.getRight());
+            for (auto &i : item) {
+                auto temprow = rm.fetch(table, i.second);
+                if (c.satisfy(temptable.getColumns(), temprow))
+                    res += rm.hide(table, i.second);
+            }
+        }
+        else
+        {
+            auto &item = rm.traverse(table);
+            for (auto &i : item) {
+                if (c.satisfy(temptable.getColumns(), i.second))
+                    res += rm.hide(table, i.first);
+            }
+        }
+        return res;
 	}
 
 	bool Photon::DBMS::CreateTable(const std::string & table, const std::vector<Column> columns)
@@ -61,27 +79,21 @@ namespace Photon {
 
 	bool DBMS::DropTable(const std::string & table)
 	{
-		auto &indicies = CatalogManager::getInstance().getTable(table).getIndicies();
-		for (auto &i : indicies) {
-			CatalogManager::getInstance().dropIndex(i);
-		}		
 		CatalogManager::getInstance().dropTable(table);
 		return true;
 	}
 
 	bool DBMS::CreateIndex(const std::string & index, const std::string & table, const std::string & column)
 	{
-		CatalogManager::getInstance().createIndex(index, table, column);
+		cm.createIndex(index, table, column);
+        im.build(index);
 		return true;
 	}
 
 	bool DBMS::DropIndex(const std::string & index)
 	{
-		CatalogManager::getInstance().dropIndex(index);
+		cm.dropIndex(index);
 		return true;
 	}
-
-
-
 
 }

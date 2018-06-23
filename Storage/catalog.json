@@ -1,0 +1,1 @@
+{"indicies":[{"name":"PersonKey","table":"Person","column":"id"}],"tables":[{"name":"Person","increment":3,"columns":[{"name":"id","type":3,"length":10,"notNull":true,"unique":true},{"name":"name","type":3,"length":10,"notNull":true,"unique":false},{"name":"age","type":2,"length":8,"notNull":false,"unique":false}]}]}

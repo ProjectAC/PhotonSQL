@@ -49,6 +49,7 @@ namespace Photon
         RecordResult traverse(const std::string &tableName);
         Row fetch(const std::string &tableName, uint id);
         uint insert(const std::string &tableName, const Row &row);
+        bool hide(const std::string &tableName, uint id);
 
         RecordManager();
 

@@ -31,13 +31,17 @@ namespace Photon
 		void clear();
         void add(const ConditionItem &item);
 
-        void setIndex(std::string index);
-        std::string getIndex();
+        void setIndex(std::string index, Attribute left, Attribute right);
+        std::string getIndex() const;
+        Attribute getLeft() const;
+        Attribute getRight() const;
 
     private:
 
         std::vector<ConditionItem> conditions;
         std::string index;
+        Attribute left;
+        Attribute right;
     };
     
     class SQL
@@ -59,10 +63,15 @@ namespace Photon
         };
 
         SQL(std::string sql);
+        SQL();
 
+        SQL & operator= (std::string sql);
         std::string getTable();
         Verb getVerb();
         Condition getCondition();
         std::vector<Row> SQL::getRows();
+
+    private:
+        void splitSQL(std::string sql);
     };
 }

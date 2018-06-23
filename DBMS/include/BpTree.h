@@ -188,7 +188,7 @@ namespace Photon
             p = tmp.first;
             pos = tmp.second;
 
-            while (p && p->pointers[pos + 1] == 0)
+            while (p && p->pointers[pos + 1] == (uint)-1)
                 step();
         }
 
@@ -197,7 +197,7 @@ namespace Photon
             p(head ? tree->load(1) : nullptr),
             pos(head ? 0 : -1)
         {
-            while (p && p->pointers[pos + 1] == 0)
+            while (p && p->pointers[pos + 1] == (uint)-1)
                 step();
         }
 
@@ -227,7 +227,7 @@ namespace Photon
         const BpIterator& operator ++()
         {
             do step();
-            while (p && p->pointers[pos + 1] == 0);
+            while (p && p->pointers[pos + 1] == (uint)-1);
             return *this;
         }
 

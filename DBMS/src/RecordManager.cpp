@@ -26,6 +26,26 @@ namespace Photon
         return decode(table.getColumns(), p + innerID * rowSize);
     }
 
+    bool RecordManager::hide(const std::string &tableName, uint id)
+    {
+        Table &table = CatalogManager::getInstance().getTable(tableName);
+        uint rowSize = table.rowSize();
+        uint rowsPerBlock = BufferManager::SIZE / rowSize;
+        uint blockID = id / rowsPerBlock;
+        uint innerID = id % rowsPerBlock;
+
+        auto &buffer = BufferManager::getInstance();
+        byte *p = buffer.get("../Storage/records/" + tableName + ".rcd", blockID);
+
+        if (readBit(p + innerID * rowSize, 0))
+        {
+            writeBit(p + innerID * rowSize, 0, false);
+            return true;
+        }
+        else
+            return false;
+    }
+
     uint RecordManager::insert(const std::string &tableName, const Row &row)
     {
         Table &table = CatalogManager::getInstance().getTable(tableName);

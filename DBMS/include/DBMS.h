@@ -24,10 +24,22 @@ namespace Photon
         bool DropTable(const std::string &table);
         bool CreateIndex(const std::string &index, const std::string &table, const std::string &column);
         bool DropIndex(const std::string &index);
+    
+        DBMS()
+        {
+            cm.loadCatalog("../Storage/catalog.json");
+        }
+
+        ~DBMS()
+        {
+            cm.saveCatalog("../Storage/catalog.json");
+        }
 
     private:
-        
 
-
+        CatalogManager cm;
+        RecordManager rm;
+        BufferManager bm;
+        IndexManager im;
     };
 }

@@ -1,3 +1,4 @@
+/*
 #include "include/CatalogManager.h"
 #include "include/IndexManager.h"
 #include "include/RecordManager.h"
@@ -15,33 +16,33 @@ RecordManager rm;
 
 void testCatalog()
 {
-    /*
     vector<Column> columns;
     columns.push_back({
-    "id",
-    STRING,
-    10,
-    true,
-    true
+        "id",
+        STRING,
+        10,
+        true,
+        true
     });
     columns.push_back({
-    "name",
-    STRING,
-    10,
-    true,
-    false
+        "name",
+        STRING,
+        10,
+        true,
+        false
     });
     columns.push_back({
-    "age",
-    REAL,
-    0,
-    false,
-    false
+        "age",
+        REAL,
+        0,
+        false,
+        false
     });
 
     cm.createTable("Person", columns);
+    cm.createIndex("PersonKey", "Person", "id");
+
     cm.saveCatalog("../Storage/test.json");
-    */
 
     cm.loadCatalog("../Storage/test.json");
 
@@ -109,7 +110,6 @@ void testRecordManager()
 {
     cm.loadCatalog("../Storage/test.json");
     
-    /*
     Row row;
     row.push_back(Attribute("sol"));
     row.push_back(Attribute("SOL"));
@@ -122,7 +122,6 @@ void testRecordManager()
     cout << get<string>(row[0]) << endl;
     cout << get<string>(row[1]) << endl;
     cout << get<Real>(row[2]) << endl;
-    */
 
     for (int i = 0; i < 10; i++)
     {
@@ -164,13 +163,14 @@ int main()
 {
     //testBpTree();
     //testBpTreeLoad();
-    //testCatalog();
+    testCatalog();
     //testIndexManager();
     //testRecordManager();
 
-    testSQL();
+    //testSQL();
 
     system("pause");
 
     return 0;
 }
+*/

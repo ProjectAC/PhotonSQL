@@ -139,6 +139,7 @@
     <ClCompile Include="src\Catalog.cpp" />
     <ClCompile Include="src\CatalogManager.cpp" />
     <ClCompile Include="src\Condition.cpp" />
+    <ClCompile Include="src\DBMS.cpp" />
     <ClCompile Include="src\IndexManager.cpp" />
     <ClCompile Include="src\RecordManager.cpp" />
     <ClCompile Include="test.cpp" />

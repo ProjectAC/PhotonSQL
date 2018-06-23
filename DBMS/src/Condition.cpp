@@ -19,6 +19,8 @@ namespace Photon
 
     bool Condition::satisfy(const std::vector<Column> &columns, const Row &row) const
     {
+        if (!row.size())
+            return false;
 		for (auto &c : conditions)
         {
             const Attribute &a = c.i1 < 0 ? c.a1 : row[c.i1];
@@ -54,18 +56,48 @@ namespace Photon
         return true;
     }
     
-    void Condition::setIndex(std::string index)
+    void Condition::setIndex(std::string index, Attribute left, Attribute right)
     {
         this->index = index;
+        this->left = left;
+        this->right = right;
     }
 
-    std::string Condition::getIndex()
+    std::string Condition::getIndex() const
     {
         return this->index;
     }
 
+    Attribute Condition::getLeft() const
+    {
+        return this->left;
+    }
+
+    Attribute Condition::getRight() const
+    {
+        return this->right;
+    }
+
+    SQL::SQL()
+    {
+
+    }
+
     SQL::SQL(std::string sql)
     {
+        splitSQL(sql);
+    }
+
+    SQL & SQL::operator= (std::string sql)
+    {
+        splitSQL(sql);
+        return *this;
+    }
+
+    void SQL::splitSQL(std::string sql)
+    {
+        split.clear();
+
         std::string cur = "";
         bool in = false;
         for (auto &c : sql)
@@ -99,7 +131,7 @@ namespace Photon
                         split.push_back(cur);
                     cur = "";
                 }
-                else if (!isalnum(c))
+                else if (!isalnum(c) && (c != '=' || isalnum(cur[0])))
                 {
                     if (cur.length())
                         split.push_back(cur);
@@ -207,7 +239,7 @@ namespace Photon
                 }
                 else if (cols[cnt].type == STRING)
                 {
-                    r.push_back(s);
+                    r.push_back(s.substr(1, s.length() - 2));
                 }
                 cnt++;
             }
@@ -224,7 +256,9 @@ namespace Photon
         Condition::ConditionItem ci;
 
         std::string tname = getTable();
-        Table &table = CatalogManager::getInstance().getTable(tname);
+        CatalogManager &cm = (CatalogManager::getInstance());
+        Table &table = cm.getTable(tname);
+        auto &indicies = table.getIndicies();
 
         uint i = 0, n = split.size(), t, col;
         for (i = 0; i < n - 1 && split[i] != "where"; i++);
@@ -271,7 +305,7 @@ namespace Photon
                 }
                 t = 1;
             }
-            else if (t == 1)
+            else if (t == 1)  // relation
             {
                 if (s == "<")
                     ci.relation = Condition::LESS;
@@ -289,7 +323,7 @@ namespace Photon
                     throw SQLException();
                 t = 2;
             }
-            else if (t == 2)
+            else if (t == 2)  // op2
             {
                 if (s[0] == '\'')
                 {
@@ -323,6 +357,33 @@ namespace Photon
                 {
                     throw SQLException();
                 }
+
+                if (cond.getIndex() == "")
+                {
+                    if (ci.i1 != -1 && ci.i2 == -1)
+                    {
+                        for (auto &t : indicies)
+                        {
+                            if (table.hasColumn((cm.getIndex(t).column)) == ci.i1)
+                            {
+                                //cond.setIndex(s, ci.a2);
+                                break;
+                            }
+                        }
+                    }
+                    else if (ci.i2 != -1 && ci.i1 == -1)
+                    {
+                        for (auto &t : indicies)
+                        {
+                            if (table.hasColumn((cm.getIndex(t).column)) == ci.i1)
+                            {
+                                //cond.setIndex(s);
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 cond.add(ci);
                 t = 3;
             }

@@ -116,7 +116,7 @@ namespace Photon
         int pos = tmp.second;
         if (0 <= pos && pos < p->size && p->keys[pos] == key)
         {
-            p->pointers[pos + 1] = 0;
+            p->pointers[pos + 1] = (uint)-1;
             p->save(BufferManager::getInstance().get(name, p->id));
         }
         delete p;
@@ -156,7 +156,8 @@ namespace Photon
         {
             p = load(cur);
 
-            for (pos = 0; pos < (int)p->size && p->keys[pos] <= key; pos++);
+            for (pos = 0; pos < (int)p->size && !(key < p->keys[pos]); pos++)
+                ;
             pos--;
 
             if (p->leaf == true)
