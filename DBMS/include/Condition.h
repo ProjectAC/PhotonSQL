@@ -27,7 +27,7 @@ namespace Photon
             Relation relation;
         };
 
-        bool satisfy(const std::vector<Column> &columns, const Row &row);
+        bool satisfy(const std::vector<Column> &columns, const Row &row) const;
 		void clear();
         void add(const ConditionItem &item);
         //const std::vector<ConditionItem> &getItems();
