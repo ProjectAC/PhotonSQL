@@ -17,7 +17,7 @@ namespace Photon
 		conditions.push_back(item);
 	}
 
-    bool Condition::satisfy(const std::vector<Column> &columns, const Row &row)
+    bool Condition::satisfy(const std::vector<Column> &columns, const Row &row) const
     {
 		for (auto &c : conditions)
         {
