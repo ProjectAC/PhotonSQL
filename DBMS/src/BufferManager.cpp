@@ -1,4 +1,5 @@
 #include "../include/BufferManager.h"
+#include <cstdio>
 
 using namespace std;
 
@@ -29,6 +30,14 @@ namespace Photon
         if (files.find(fileName) == files.end())
             files[fileName] = new FileBuffer(fileName);
         return files[fileName]->get(id);
+    }
+
+    void BufferManager::drop(const std::string &fileName)
+    {
+        if (files.find(fileName) != files.end())
+            delete files[fileName];
+        files.erase(fileName);
+        remove(fileName.c_str());
     }
 
     ///////////// FileBuffer /////////////

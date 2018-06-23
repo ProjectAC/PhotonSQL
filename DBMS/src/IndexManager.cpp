@@ -58,6 +58,13 @@ namespace Photon
             tree->insert(record.second[cid], record.first);
     }
 
+    void IndexManager::drop(const std::string &indexName)
+    {
+        delete findIndex(indexName);
+        indicies.erase(indexName);
+        BufferManager::getInstance().drop("../Storage/indicies/" + indexName + ".idx");
+    }
+
     BpTree *IndexManager::findIndex(std::string name)
     {
         if (indicies.find(name) == indicies.end())

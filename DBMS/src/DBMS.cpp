@@ -7,20 +7,20 @@ namespace Photon {
 		String indexname;
 		std::vector<Row> result;
 
-        Table &temptable = CatalogManager::getInstance().getTable(table);
+        Table &temptable = cm.getTable(table);
 
 		if ((indexname = c.getIndex()) != "")
 		{
-			auto &item = IndexManager::getInstance().fetch(indexname, c.getLeft(), c.getRight());
+			auto &item = im.fetch(indexname, c.getLeft(), c.getRight());
 			for (auto &i : item) {
-				auto temprow = RecordManager::getInstance().fetch(table, i.second);
+				auto temprow = rm.fetch(table, i.second);
 				if (c.satisfy(temptable.getColumns(), temprow))
 					result.push_back(temprow);
 			}
 		}
 		else
 		{
-			auto &item = RecordManager::getInstance().traverse(table);
+			auto &item = rm.traverse(table);
 			for (auto &i : item) {
 				if (c.satisfy(temptable.getColumns(), i.second))
 					result.push_back(i.second);
@@ -73,13 +73,14 @@ namespace Photon {
 
 	bool Photon::DBMS::CreateTable(const std::string & table, const std::vector<Column> columns)
 	{
-		CatalogManager::getInstance().createTable(table, columns);
+		cm.createTable(table, columns);
 		return true;
 	}
 
 	bool DBMS::DropTable(const std::string & table)
 	{
-		CatalogManager::getInstance().dropTable(table);
+		cm.dropTable(table);
+        bm.drop("../Storage/records/" + table + ".rcd");
 		return true;
 	}
 
@@ -93,6 +94,7 @@ namespace Photon {
 	bool DBMS::DropIndex(const std::string & index)
 	{
 		cm.dropIndex(index);
+        im.drop(index);
 		return true;
 	}
 

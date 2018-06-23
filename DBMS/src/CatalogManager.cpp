@@ -1,4 +1,5 @@
 #include "../include/CatalogManager.h"
+#include "../include/IndexManager.h"
 #include "../include/Exception.h"
 
 #include "rapidjson/rapidjson.h"  
@@ -62,7 +63,10 @@ namespace Photon
     {
         auto &ix = getTable(tableName).getIndicies();
         for (auto &i : ix)
+        {
             indicies.erase(i);
+            IndexManager::getInstance().drop(i);
+        }
 
         tables.erase(tableName);
     }

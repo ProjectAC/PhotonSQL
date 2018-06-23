@@ -32,6 +32,7 @@ namespace Photon
         void insert(const std::string &indexName, const Attribute &id, uint handle);
         void erase(const std::string &indexName, const Attribute &id);
         void build(const std::string &indexName);
+        void drop(const std::string &indexName);
 
         BpTree *findIndex(std::string name);
 

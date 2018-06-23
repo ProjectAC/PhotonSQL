@@ -64,7 +64,7 @@ int main()
     sql = "insert into Person values ('sol', 'SOL', 19), ('xiang', 'Xiang', 18), ('root', 'Admin', 20);";
     auto &rows = sql.getRows();
     uint ins = dbms.Insert(sql.getTable(), rows);
-    cout << ins << " rows inserted." << endl;
+    cout << ins << " row(s) inserted." << endl;
 
     sql = "select * from Person where id = 'sol' and age < 20;";
     cond = sql.getCondition();
@@ -91,7 +91,7 @@ int main()
     sql = "delete from Person where name = 'Xiang';";
     cond = sql.getCondition();
     uint del = dbms.Delete("Person", cond);
-    cout << del << " rows deleted." << endl;
+    cout << del << " row(s) deleted." << endl;
     
     sql = "select * from Person where id >= 'sol' and age <= 20;";
     cond = sql.getCondition();
@@ -104,7 +104,6 @@ int main()
         cout << endl;
     }
 
-    /*
     dbms.DropTable("Person");
     try
     {
@@ -112,11 +111,10 @@ int main()
         Condition cond = sql.getCondition();
         dbms.Select("Person", cond);
     }
-    catch (exception e)
+    catch (...)
     {
         printf("Failed\n");
     }
-    */
 
     system("pause");
 

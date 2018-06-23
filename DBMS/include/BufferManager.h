@@ -18,6 +18,7 @@ namespace Photon
         ~BufferManager();
 
         byte *get(const std::string &fileName, uint id);
+        void drop(const std::string &fileName);
 
     private:
 
