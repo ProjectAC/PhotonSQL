@@ -109,7 +109,7 @@ namespace Photon
         ifstream file(fileName);
         string json, tmp;
 
-        if (file.fail())
+        if (file.fail() || file.bad() || file.eof())
             return;
 
         while (file.good())
@@ -117,6 +117,8 @@ namespace Photon
             getline(file, tmp);
             json += tmp + '\n';
         }
+        if (json.length() == 1)
+            return;
 
         Document d;
         d.Parse(json.c_str());

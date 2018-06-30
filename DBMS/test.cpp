@@ -34,7 +34,7 @@ void testCatalog()
     columns.push_back({
         "age",
         REAL,
-        0,
+        8,
         false,
         false
     });
@@ -73,6 +73,7 @@ void testBpTree()
     tree.erase("d");
     tree.erase("f");
     tree.erase("j");
+    tree.debug();
 
     for (auto x = BpIterator(&tree, Attribute("d")), y = BpIterator(&tree, Attribute("k")); x != y; ++x)
     {
@@ -163,12 +164,13 @@ int main()
 {
     //testBpTree();
     //testBpTreeLoad();
-    testCatalog();
+    //testCatalog();
     //testIndexManager();
     //testRecordManager();
 
-    //testSQL();
+    testSQL();
 
+    printf("\n");
     system("pause");
 
     return 0;
