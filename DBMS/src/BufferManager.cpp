@@ -65,7 +65,11 @@ namespace Photon
         auto &buffer = buffers[id & 0xF];
 
         if (buffer->ID() != id)
+		{
+            if (buffer->ID() != (uint)-1)
+			    buffer->save();
             buffer->load(id);
+		}
 
         return buffer->content();
     }

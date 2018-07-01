@@ -37,7 +37,7 @@ namespace Photon {
         auto &temp = t.getIndicies();
 		for (auto &i : res)
         {
-			num += ((id = rm.insert(table, i)) != 0);
+			num += ((id = rm.insert(table, i)) != -1);
 			for (auto &j : temp)
 				im.insert(j, i[t.hasColumn(cm.getIndex(j).column)], id);
 		}
